@@ -17,6 +17,9 @@ class Lead(models.Model):
     # Foreing key
     agent = models.ForeignKey("Agent", on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class Agent(models.Model):
     # OneToOneField tgiene que ir relacionado a un foreingkey
@@ -24,3 +27,6 @@ class Agent(models.Model):
     # estos 2 lo tenemos dentro de abstractUser
     # first_name = models.CharField(max_length=20)
     # last_name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.user.email
