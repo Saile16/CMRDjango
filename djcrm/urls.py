@@ -13,14 +13,24 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from leads.views import landing_page
+from leads.views import landing_page, LandingPageView
 # from leads.views import home_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', landing_page, name="landing-page"),
-    path('leads/', include('leads.urls', namespace="leads"))
+    path('', LandingPageView.as_view(), name='landing-page'),
+    # path('', landing_page, name="landing-page"),#modo funciones
+    path('leads/', include('leads.urls', namespace="leads")),
     # path('', home_page)
+    # dado que puusimos un STATIC_ROOT en settings podemos hacerlo de esta manera
+    # recordar los imports
+    # static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL,
+                          document_root=settings.STATIC_ROOT)
