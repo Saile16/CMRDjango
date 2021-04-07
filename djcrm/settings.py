@@ -128,3 +128,6 @@ STATICFILES_DIRS = [
 
 # de esta manera le decimos que busque y use abstract user en models
 AUTH_USER_MODEL = 'leads.User'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+LOGIN_REDIRECT_URL = "/leads"

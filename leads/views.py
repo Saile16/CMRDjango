@@ -1,9 +1,21 @@
+from django.core.mail import send_mail
+
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
 from django.views import generic
 # Create your views here.
 from .models import Lead, Agent
-from .forms import LeadForm, LeadModelForm
+from .forms import LeadForm, LeadModelForm, CustomUserCreationForm
+
+
+class SignupView(generic.CreateView):
+    # cuando usamos classviews estos pasan un "contexto" automatico
+    # lleva por nombre object_list
+    template_name = "registration/signup.html"
+    form_class = CustomUserCreationForm
+
+    def get_success_url(self):
+        return reverse("login")
 
 
 #CRUD -Create,Retrievce,Update and DELETE + list
@@ -63,6 +75,18 @@ class LeadCreateView(generic.CreateView):
 
     def get_success_url(self):
         return reverse("leads:lead-list")
+
+    def form_valid(self, form):
+        # TODo SEND EMAIL
+        # estamos probando enviar email stos son los valores por defecto que viene
+        # en la documentacion leer mas
+        send_mail(
+            subject="A lead has been created",
+            message="Go to the site to see the new lead",
+            from_email="test@test.com",
+            recipient_list=["test2@test.com"]
+        )
+        return super(LeadCreateView, self).form_valid(form)
 
 
 def lead_create(request):
