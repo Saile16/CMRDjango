@@ -27,6 +27,7 @@ urlpatterns = [
     path('', LandingPageView.as_view(), name='landing-page'),
     # path('', landing_page, name="landing-page"),#modo funciones
     path('leads/', include('leads.urls', namespace="leads")),
+    path('agents/', include('agents.urls', namespace="agents")),
     # path('', home_page)
     # dado que puusimos un STATIC_ROOT en settings podemos hacerlo de esta manera
     # recordar los imports
