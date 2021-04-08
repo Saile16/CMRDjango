@@ -9,7 +9,8 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    pass
+    is_organisor = models.BooleanField(default=True)
+    is_agent = models.BooleanField(default=False)
 
 # para que cada usuario tenga asignados sus agentes y solo lo que el agrego a su vista tenemos
 # que crear un userprofile que ira ligado al user
