@@ -1,6 +1,7 @@
 from django.core.mail import send_mail
 
 from django.shortcuts import render, redirect, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.views import generic
 # Create your views here.
@@ -27,7 +28,7 @@ def landing_page(request):
     return render(request, "landing.html")
 
 
-class LeadListView(generic.ListView):
+class LeadListView(LoginRequiredMixin, generic.ListView):
     # cuando usamos classviews estos pasan un "contexto" automatico
     # lleva por nombre object_list
     template_name = "leads/lead_list.html"
