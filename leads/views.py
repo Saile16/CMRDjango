@@ -39,13 +39,25 @@ class LeadListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         user = self.request.user
         if user.is_organisor:
-            queryset = Lead.objects.filter(organisation=user.userprofile)
+            queryset = Lead.objects.filter(
+                organisation=user.userprofile, agent__isnull=False)
         else:
             queryset = Lead.objects.filter(
-                organisation=user.agent.organisation)
+                organisation=user.agent.organisation, agent__isnull=False)
             # filtrar por el agente que esta logeado
             queryset = queryset.filter(agent__user=user)
         return queryset
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        context = super(LeadListView, self).get_context_data(**kwargs)
+        if user.is_organisor:
+            queryset = Lead.objects.filter(
+                organisation=user.userprofile, agent__isnull=True)
+            context.update({
+                'unassigned_leads': queryset
+            })
+        return context
 
 
 def lead_list(request):
@@ -170,6 +182,9 @@ def lead_delete(request, pk):
     lead.delete()
     return redirect("/leads")
 
+
+class AssignAgentView(OrganisorAndLoginRequiredMixin, generic.FormView):
+    template_name = "leads/assign_agent.html"
 # def lead_update(request, pk):
 #     lead = Lead.objects.get(id=pk)
 #     form = LeadForm()
